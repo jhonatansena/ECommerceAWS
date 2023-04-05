@@ -4,15 +4,20 @@ import { Construct } from "constructs"
 import * as apigateway from "aws-cdk-lib/aws-apigateway"
 import * as cwlogs from "aws-cdk-lib/aws-logs"
 
-export class ecommerceApiStack extends Stack {
+interface EcommerceApiStackProps extends StackProps {
+    productsFetchHandler: lambdaNodeJS.NodejsFunction
+}
+
+export class EcommerceApiStack extends Stack {    
     
-    
-    constructor(scope: Construct, id: string, props?: StackProps) {
+    constructor(scope: Construct, id: string, props: EcommerceApiStackProps) {
         super(scope, id)
 
         const api = new apigateway.RestApi(this, "ECommerceApi", {
             restApiName: "ECommerceApi"
         })
-
+    
+        const productsFetchIntegration = new apigateway.LambdaIntegration(props.productsFetchHandler)
+        const productsResource = api.root.addResource("products")
     }
 }
