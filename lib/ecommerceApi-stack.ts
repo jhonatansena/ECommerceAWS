@@ -15,6 +15,7 @@ export class EcommerceApiStack extends Stack {
         const logGroup = new cwlogs.LogGroup(this, "ECommerceApiLogs")
         const api = new apigateway.RestApi(this, "ECommerceApi", {
             restApiName: "ECommerceApi",
+            cloudWatchRole: true,
             deployOptions: {
                 accessLogDestination: new apigateway.LogGroupLogDestination(logGroup),
                 accessLogFormat: apigateway.AccessLogFormat.jsonWithStandardFields({
@@ -26,12 +27,13 @@ export class EcommerceApiStack extends Stack {
                     responseLength: true,
                     status: true,
                     caller: true,
-                    user: true
+                    user: true,
                 })
             }
         })
     
         const productsFetchIntegration = new apigateway.LambdaIntegration(props.productsFetchHandler)
         const productsResource = api.root.addResource("products")
+        productsResource.addMethod("GET", productsFetchIntegration)
     }
 }
