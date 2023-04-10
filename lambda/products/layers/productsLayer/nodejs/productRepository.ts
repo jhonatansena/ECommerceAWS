@@ -50,4 +50,20 @@ export class ProductRepository {
 
         return product
     }
+
+    async deleteProduct(productId: string): Promise<Product> {
+        const data = await this.dynamoDbClient.delete({
+            TableName: this.productsDdb,
+            Key: {
+                id: productId
+            },
+            ReturnValues: "ALL_OLD"
+        }).promise()
+
+        if (!data.Attributes) {
+            throw new Error('Product not foud')
+        }   
+
+        return data.Attributes as Product
+    }
 }
