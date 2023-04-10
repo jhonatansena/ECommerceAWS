@@ -40,4 +40,14 @@ export class ProductRepository {
 
         return data.Item as Product
     }
+
+    async create(product: Product): Promise<Product> {
+        product.id = uuid()
+        await this.dynamoDbClient.put({
+            TableName: this.productsDdb,
+            Item: product
+        }).promise()
+
+        return product
+    }
 }
