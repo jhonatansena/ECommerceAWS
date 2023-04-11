@@ -1,5 +1,5 @@
 import { APIGatewayProxyEvent, APIGatewayProxyResult, Context } from "aws-lambda";
-import DynamoDB = require("aws-sdk/clients/dynamodb");
+import { DynamoDB } from 'aws-sdk'
 import { ProductRepository } from "/opt/nodejs/productsLayer";
 
 const productsDdb = process.env.PRODUCTS_DDB!
